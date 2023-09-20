@@ -4,7 +4,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.example.compose_paging_demo.data.database.datasource.BeerLocalDataSource
+import com.example.compose_paging_demo.data.database.dao.BeerDao
 import com.example.compose_paging_demo.data.database.model.BeerEntity
 import com.example.compose_paging_demo.data.network.datasource.BeerRemoteDataSource
 import com.example.compose_paging_demo.data.network.model.toBeerEntity
@@ -17,7 +17,7 @@ import javax.inject.Inject
  */
 @OptIn(ExperimentalPagingApi::class)
 class BeerMediator @Inject constructor(
-    private val beerLocalDataSource: BeerLocalDataSource,
+    private val beerDao: BeerDao,
     private val beerRemoteDataSource: BeerRemoteDataSource
 ) : RemoteMediator<Int, BeerEntity>() {
 
@@ -63,7 +63,7 @@ class BeerMediator @Inject constructor(
                 pageCount = state.config.pageSize
             )
 
-            beerLocalDataSource.saveBeersAndDeleteIfRequired(
+            beerDao.saveBeersAndDeleteIfRequired(
                 beers = beers.map { it.toBeerEntity() },
                 shouldDelete = loadType == LoadType.REFRESH
             )
